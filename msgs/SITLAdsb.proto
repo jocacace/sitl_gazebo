@@ -1,0 +1,18 @@
+syntax = "proto2";
+package sensor_msgs.msgs;
+
+message SITLAdsb
+{
+  required int64  time_usec             = 1;
+  required double latitude_deg          = 2;
+  required double longitude_deg         = 3;
+  required double altitude              = 4;
+  required double altitude_type         = 5;
+  optional double hor_velocity          = 6;
+  optional double ver_velocity          = 7;
+  optional double callsign              = 8;
+  optional double emitter_type          = 9;
+  optional double tslc                  = 10;
+  optional double squawk                = 11;
+  optional double icao_address          = 12;
+}

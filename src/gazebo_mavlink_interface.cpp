@@ -144,6 +144,7 @@ void GazeboMavlinkInterface::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf
       motor_velocity_reference_pub_topic_);
   getSdfParam<std::string>(_sdf, "imuSubTopic", imu_sub_topic_, imu_sub_topic_);
   getSdfParam<std::string>(_sdf, "gpsSubTopic", gps_sub_topic_, gps_sub_topic_);
+  getSdfParam<std::string>(_sdf, "adsbSubTopic", adsb_sub_topic_, adsb_sub_topic_);
   getSdfParam<std::string>(_sdf, "visionSubTopic", vision_sub_topic_, vision_sub_topic_);
   getSdfParam<std::string>(_sdf, "opticalFlowSubTopic",
       opticalFlow_sub_topic_, opticalFlow_sub_topic_);
@@ -354,7 +355,7 @@ void GazeboMavlinkInterface::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf
   vision_sub_ = node_handle_->Subscribe("~/" + model_->GetName() + vision_sub_topic_, &GazeboMavlinkInterface::VisionCallback, this);
   mag_sub_ = node_handle_->Subscribe("~/" + model_->GetName() + mag_sub_topic_, &GazeboMavlinkInterface::MagnetometerCallback, this);
   baro_sub_ = node_handle_->Subscribe("~/" + model_->GetName() + baro_sub_topic_, &GazeboMavlinkInterface::BarometerCallback, this);
-
+  adsb_sub_ = node_handle_->Subscribe("~/transponder", &GazeboMavlinkInterface::AdsbCallback, this);
   // Get the model links
   auto links = model_->GetLinks();
 
@@ -1323,6 +1324,19 @@ void GazeboMavlinkInterface::BarometerCallback(BarometerPtr& baro_msg) {
   // no specific diff pressure sensor plugin yet
   baro_updated_ = true;
   diff_press_updated_ = true;
+}
+
+void GazeboMavlinkInterface::AdsbCallback(AdsbPtr& adsb_msg) {
+  mavlink_adsb_vehicle_t adsb;
+
+  adsb.lat = adsb_msg->latitude_deg();
+  adsb.lon = adsb_msg->longitude_deg();
+  adsb.altitude = adsb_msg->altitude();
+  adsb.altitude_type = adsb_msg->altitude_type();
+  adsb.ICAO_address = adsb_msg->icao_address();
+  mavlink_message_t msg;
+  mavlink_msg_adsb_vehicle_encode_chan(1, 200, MAVLINK_COMM_1, &msg, &adsb);
+  send_mavlink_message(&msg);
 }
 
 void GazeboMavlinkInterface::pollForMAVLinkMessages()

@@ -62,6 +62,7 @@
 #include <OpticalFlow.pb.h>
 #include <Range.pb.h>
 #include <SITLGps.pb.h>
+#include <SITLAdsb.pb.h>
 #include <IRLock.pb.h>
 #include <Groundtruth.pb.h>
 #include <Odometry.pb.h>
@@ -101,6 +102,7 @@ typedef const boost::shared_ptr<const sensor_msgs::msgs::Range> LidarPtr;
 typedef const boost::shared_ptr<const sensor_msgs::msgs::SITLGps> GpsPtr;
 typedef const boost::shared_ptr<const sensor_msgs::msgs::MagneticField> MagnetometerPtr;
 typedef const boost::shared_ptr<const sensor_msgs::msgs::Pressure> BarometerPtr;
+typedef const boost::shared_ptr<const sensor_msgs::msgs::SITLAdsb> AdsbPtr;
 
 typedef std::pair<const int, const ignition::math::Quaterniond> SensorIdRot_P;
 typedef std::map<transport::SubscriberPtr, SensorIdRot_P > Sensor_M;
@@ -119,6 +121,7 @@ static const std::string kDefaultGPSTopic = "/gps";
 static const std::string kDefaultVisionTopic = "/vision_odom";
 static const std::string kDefaultMagTopic = "/mag";
 static const std::string kDefaultBarometerTopic = "/baro";
+static const std::string kDefaultAdsbTopic = "/transponder";
 
 //! Rx packer framing status. (same as @p mavlink::mavlink_framing_t)
 enum class Framing : uint8_t {
@@ -167,6 +170,7 @@ public:
     vehicle_is_tailsitter_(false),
     send_vision_estimation_(false),
     send_odometry_(false),
+    adsb_sub_topic_(kDefaultAdsbTopic),
     imu_sub_topic_(kDefaultImuTopic),
     opticalFlow_sub_topic_(kDefaultOpticalFlowTopic),
     irlock_sub_topic_(kDefaultIRLockTopic),
@@ -286,6 +290,7 @@ private:
   void VisionCallback(OdomPtr& odom_msg);
   void MagnetometerCallback(MagnetometerPtr& mag_msg);
   void BarometerCallback(BarometerPtr& baro_msg);
+  void AdsbCallback(AdsbPtr& adsb_msg);
   void send_mavlink_message(const mavlink_message_t *message);
   void forward_mavlink_message(const mavlink_message_t *message);
   void handle_message(mavlink_message_t *msg, bool &received_actuator);
@@ -341,6 +346,7 @@ private:
   int input_index_[n_out_max];
   transport::PublisherPtr joint_control_pub_[n_out_max];
 
+  transport::SubscriberPtr adsb_sub_;
   transport::SubscriberPtr imu_sub_;
   transport::SubscriberPtr opticalFlow_sub_;
   transport::SubscriberPtr irlock_sub_;
@@ -352,6 +358,7 @@ private:
 
   Sensor_M sensor_map_; // Map of sensor SubscriberPtr, IDs and orientations
 
+  std::string adsb_sub_topic_;
   std::string imu_sub_topic_;
   std::string opticalFlow_sub_topic_;
   std::string irlock_sub_topic_;
