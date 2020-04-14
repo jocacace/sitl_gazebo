@@ -1,0 +1,330 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+	<xacro:property name="DEG2RAD" value="0.017453292519943295"/>
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+
+  <!-- Macro to add a camera. -->
+  <xacro:macro name="camera_macro"
+    params="namespace parent_link camera_suffix frame_rate
+      horizontal_fov image_width image_height image_format min_distance
+      max_distance noise_mean noise_stddev enable_visual *cylinder *origin">
+    <link name="${namespace}/camera_${camera_suffix}_link">
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <xacro:insert_block name="cylinder" />
+        </geometry>
+      </collision>
+      <xacro:if value="${enable_visual}">
+        <visual>
+          <origin xyz="0 0 0" rpy="0 1.57079632679 0" />
+          <geometry>
+            <xacro:insert_block name="cylinder" />
+          </geometry>
+          <material name="red" />
+        </visual>
+      </xacro:if>
+      <inertial>
+        <mass value="1e-5" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+      </inertial>
+    </link>
+    <joint name="${namespace}/camera_${camera_suffix}_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent_link}" />
+      <child link="${namespace}/camera_${camera_suffix}_link" />
+    </joint>
+    <gazebo reference="${namespace}/camera_${camera_suffix}_link">
+      <sensor type="camera" name="${namespace}_camera_${camera_suffix}">
+        <update_rate>${frame_rate}</update_rate>
+        <camera name="head">
+          <horizontal_fov>${horizontal_fov}</horizontal_fov>
+          <image>
+            <width>${image_width}</width>
+            <height>${image_height}</height>
+            <format>${image_format}</format>
+          </image>
+          <clip>
+            <near>${min_distance}</near>
+            <far>${max_distance}</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1]. -->
+            <mean>${noise_mean}</mean>
+            <stddev>${noise_stddev}</stddev>
+          </noise>
+        </camera>
+        <plugin name="${namespace}_camera_${camera_suffix}_controller" filename="libgazebo_ros_camera.so">
+          <robotNamespace>${namespace}</robotNamespace>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>${frame_rate}</updateRate>
+          <cameraName>camera_${camera_suffix}</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>camera_${camera_suffix}_link</frameName>
+          <hackBaseline>0.0</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+
+	<xacro:macro name="hokuyo_utm30lx_model" params="name parent *origin">
+    <joint name="${name}_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${name}_frame"/>
+    </joint>
+
+    <link name="${name}_frame">
+			<!--
+      <inertial>
+        <mass value="0.270" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4" />
+      </inertial>
+			-->
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+        <box size="0.025 0.025 0.035" />
+        </geometry>
+      </visual>
+			<!--
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+        <box size="0.025 0.025 0.035" />
+      </geometry>
+      </collision>
+			-->
+    </link>
+  </xacro:macro>
+
+ 
+
+
+	<xacro:macro name="hokuyo_utm30lx" params="name parent *origin ros_topic update_rate ray_count min_angle max_angle">
+      <xacro:hokuyo_utm30lx_model name="${name}" parent="${parent}">
+        <xacro:insert_block name="origin" />
+      </xacro:hokuyo_utm30lx_model>
+
+      <gazebo reference="${name}_frame">
+        <sensor type="ray" name="${name}">
+          <always_on>true</always_on>
+          <update_rate>${update_rate}</update_rate>
+          <pose>0 0 0.0 0 0 0</pose>
+          <visualize>false</visualize>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>${ray_count}</samples>
+                <resolution>1</resolution>
+                <min_angle>${min_angle * M_PI/180}</min_angle>
+                <max_angle>${max_angle * M_PI/180}</max_angle>
+              </horizontal>
+            </scan>
+            <range>
+              <min>0.2</min>
+              <max>30.0</max>
+              <resolution>0.01</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0.0</mean>
+              <stddev>0.004</stddev>
+            </noise>
+          </ray>
+          <plugin name="gazebo_ros_${name}_controller" filename="libgazebo_ros_laser.so">
+            <topicName>${ros_topic}</topicName>
+            <frameName>${name}_frame</frameName>
+          </plugin>
+        </sensor>
+      </gazebo>
+   </xacro:macro>
+
+
+  <xacro:macro name="xtion_pro_live_rgbd_camera_gazebo" params="name">
+    <gazebo reference="${name}">
+      <!-- Depth (IR) -->
+      <sensor type="depth" name="${name}_frame_sensor">
+        <always_on>true</always_on>
+        <update_rate>6.0</update_rate>
+
+        <camera>
+          <horizontal_fov>${100.0 * DEG2RAD}</horizontal_fov>
+          <image>
+           <format>R8G8B8</format>
+            <width>1360</width>
+						<height>768</height>
+          </image>
+          <clip>
+            <near>0.2</near>
+            <far>6.0</far>
+          </clip>
+        </camera>
+
+        <plugin name="${name}_frame_controller" filename="libgazebo_ros_openni_kinect.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>5.0</updateRate>
+          <cameraName>${name}</cameraName>
+          <imageTopicName>ir/image_raw</imageTopicName>
+          <cameraInfoTopicName>ir/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>depth/image_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
+          <pointCloudTopicName>depth/points</pointCloudTopicName>
+          <frameName>${name}_optical_frame</frameName>
+          <pointCloudCutoff>0.05</pointCloudCutoff>
+          <pointCloudCutoffMax>5</pointCloudCutoffMax>
+
+          <rangeMax>0.5</rangeMax>
+          <!-- Distortion parameters not supported in gazebo 1.9.* plugins -->
+          <!--distortionK1>0.00000001</distortionK1>
+          <distortionK2>0.00000001</distortionK2>
+          <distortionK3>0.00000001</distortionK3>
+          <distortionT1>0.00000001</distortionT1>
+          <distortionT2>0.00000001</distortionT2-->
+        </plugin>
+      </sensor>
+
+      <!-- RGB -->
+
+      <sensor type="depth" name="${name}_frame_sensor">
+        <always_on>true</always_on>
+        <update_rate>6.0</update_rate>
+
+        <camera>
+          <horizontal_fov>${100.0 * DEG2RAD}</horizontal_fov>
+          <image>
+            <format>R8G8B8</format> 	
+            <width>1360</width>
+            <height>768</height>
+          </image>
+          <clip>
+            <near>0.2</near>
+            <far>6.0</far>
+          </clip>
+        </camera>
+
+
+
+        <plugin name="${name}_frame_controller" filename="libgazebo_ros_openni_kinect.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>6.0</updateRate>
+          <cameraName>${name}</cameraName>
+
+          <imageTopicName>rgb/image_raw</imageTopicName>
+          <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
+          <pointCloudTopicName>rgb/points</pointCloudTopicName>
+
+          <depthImageTopicName>depth/image_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName> 
+
+          <frameName>${name}_optical_frame</frameName>
+          <pointCloudCutoff>0.05</pointCloudCutoff>
+          <pointCloudCutoffMax>5</pointCloudCutoffMax>
+          <rangeMax>2.5</rangeMax>
+
+        </plugin>   
+     </sensor> 
+
+
+    </gazebo>
+  </xacro:macro>
+
+
+ <xacro:macro name="xtion_pro_live" params="name parent *origin *optical_origin">
+
+    <!-- frames in the center of the camera -->
+    <joint name="${name}_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${name}"/>
+    </joint>
+
+    <link name="${name}">
+			<!--
+      <inertial>
+        <origin xyz="-0.00936000000 -0.00003000000 -0.00273000000" rpy="0 0 0"/>
+        <mass value="0.21970000000"/>
+        <inertia ixx="0.00000429247" ixy="0.00000000000" ixz="0.00000002565"
+                 iyy="0.00000008027" iyz="0.00000000000"
+                 izz="0.00000427339"/>
+      </inertial>
+			-->
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.01 0.08 0.01" /> 
+        </geometry>
+        <material name="DarkGrey"/>
+      </visual>
+    </link>
+
+    <joint name="${name}_optical_joint" type="fixed">
+      <xacro:insert_block name="optical_origin"/>
+      <parent link="${name}"/>
+      <child link="${name}_optical_frame"/>
+    </joint>
+
+    <link name="${name}_optical_frame">
+      <dummy_inertial/>
+    </link>
+
+    <!-- Depth sensor frames -->
+    <joint name="${name}_depth_joint" type="fixed">
+      <origin xyz="0.0 0.049 0.0" rpy="0 0 0"/>
+      <parent link="${name}"/>
+      <child link="${name}_depth_frame"/>
+    </joint>
+
+    <link name="${name}_depth_frame">
+      <dummy_inertial/>
+    </link>
+
+    <joint name="${name}_depth_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-90.0 * DEG2RAD} 0.0 ${-90.0 * DEG2RAD}"/>
+      <parent link="${name}_depth_frame"/>
+      <child link="${name}_depth_optical_frame"/>
+    </joint>
+
+    <link name="${name}_depth_optical_frame">
+      <dummy_inertial/>
+    </link>
+
+    <!-- RGB sensor frames -->
+    <joint name="${name}_rgb_joint" type="fixed">
+      <origin xyz="0.0 0.022 0.0" rpy="0 0 0"/>
+      <parent link="${name}"/>
+      <child link="${name}_rgb_frame"/>
+    </joint>
+
+    <link name="${name}_rgb_frame">
+      <dummy_inertial/>
+    </link>
+
+    <joint name="${name}_rgb_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-90.0 * DEG2RAD} 0.0 ${-90.0 * DEG2RAD}"/>
+      <parent link="${name}_rgb_frame"/>
+      <child link="${name}_rgb_optical_frame"/>
+    </joint>
+
+    <link name="${name}_rgb_optical_frame">
+      <dummy_inertial/>
+    </link>
+
+    <xacro:xtion_pro_live_rgbd_camera_gazebo name="${name}"/>
+  </xacro:macro>
+
+
+</robot>

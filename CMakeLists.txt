@@ -203,11 +203,16 @@ link_directories(
 # Generation of SDF models #
 #--------------------------#
 
+
 set(enable_mavlink_interface "true")
 set(enable_ground_truth "false")
 set(enable_logging "false")
 set(enable_camera "false")
 set(enable_wind "false")
+set(enable_camera "false")
+set(enable_depth "false")
+set(enable_laser "false")
+
 set(rotors_description_dir "${CMAKE_CURRENT_SOURCE_DIR}/models/rotors_description")
 set(scripts_dir "${CMAKE_CURRENT_SOURCE_DIR}/scripts")
 # set the vision estimation to be sent if set by the CMake option SEND_VISION_ESTIMATION_DATA
@@ -224,18 +229,9 @@ if (SEND_ODOMETRY_DATA)
   set(send_vision_estimation "false")
 endif()
 
-add_custom_command(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/models/iris/iris.sdf
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-  COMMAND rm -f ${CMAKE_CURRENT_SOURCE_DIR}/models/iris/iris.sdf
-  COMMAND ${PYTHON_EXECUTABLE} ${scripts_dir}/xacro.py -o  ${rotors_description_dir}/urdf/iris_base.urdf  ${rotors_description_dir}/urdf/iris_base.xacro enable_mavlink_interface:=${enable_mavlink_interface} enable_ground_truth:=${enable_ground_truth} enable_wind:=${enable_wind} enable_logging:=${enable_logging} rotors_description_dir:=${rotors_description_dir} send_vision_estimation:=${send_vision_estimation} send_odometry:=${send_odometry}
-  COMMAND gz sdf -p  ${rotors_description_dir}/urdf/iris_base.urdf >> ${CMAKE_CURRENT_SOURCE_DIR}/models/iris/iris.sdf
-  COMMAND rm -f ${rotors_description_dir}/urdf/iris_base.urdf
-  DEPENDS ${rotors_description_dir}/urdf/iris.xacro
-  DEPENDS ${rotors_description_dir}/urdf/iris_base.xacro
-  DEPENDS ${rotors_description_dir}/urdf/component_snippets.xacro
-  )
-add_custom_target(sdf ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/models/iris/iris.sdf)
 
+
+include(model_generation.txt)
 
 #-----------#
 # Functions #
@@ -330,6 +326,7 @@ add_library(gazebo_barometer_plugin SHARED src/gazebo_barometer_plugin.cpp)
 add_library(gazebo_catapult_plugin SHARED src/gazebo_catapult_plugin.cpp)
 add_library(gazebo_usv_dynamics_plugin SHARED src/gazebo_usv_dynamics_plugin.cpp)
 add_library(gazebo_parachute_plugin SHARED src/gazebo_parachute_plugin.cpp)
+
 
 set(plugins
   gazebo_geotagged_images_plugin
