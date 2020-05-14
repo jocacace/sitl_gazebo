@@ -2,7 +2,7 @@
 
 <robot name="iris" xmlns:xacro="http://ros.org/wiki/xacro">
    <!-- Properties -->
-  <xacro:property name="namespace" value="hexa" />
+  <xacro:property name="namespace" value="hexa_tilt" />
   <xacro:property name="rotor_velocity_slowdown_sim" value="10" />
   <xacro:property name="mesh_file" value="hexa.stl" />
   <xacro:property name="mesh_scale" value="0.001 0.001 0.001"/>
@@ -35,7 +35,7 @@
 
   <xacro:include filename="$(arg rotors_description_dir)/urdf/include/multirotor_base.xacro" />
   <xacro:include filename="$(arg rotors_description_dir)/urdf/include/sensors.xacro" />
-
+  <xacro:include filename="$(arg rotors_description_dir)/urdf/include/tilt_rotor.xacro" />
   <!-- Property Blocks -->
   <xacro:property name="body_inertia">
     <inertia 
@@ -130,7 +130,7 @@
 
 	
 
-  <xacro:vertical_rotor
+  <xacro:vertical_tilting_rotor
     robot_namespace="${namespace}"
     suffix="3"
     direction="ccw"
@@ -151,9 +151,9 @@
     
     <origin xyz="0.211396 0.119762 0.082219" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
-  </xacro:vertical_rotor>
+  </xacro:vertical_tilting_rotor>
 
-   <xacro:vertical_rotor
+   <xacro:vertical_tilting_rotor
     robot_namespace="${namespace}"
     suffix="0"
     direction="ccw"
@@ -173,10 +173,10 @@
     color="Blue">
     <origin xyz="-0.209396 0.122762 0.082219" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
-  </xacro:vertical_rotor>
+  </xacro:vertical_tilting_rotor>
 
 
-   <xacro:vertical_rotor
+   <xacro:vertical_tilting_rotor
     robot_namespace="${namespace}"
     suffix="4"
     direction="cw"
@@ -196,10 +196,10 @@
     color="White">
     <origin xyz="-0.00187896 0.242705 0.0822169" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
-  </xacro:vertical_rotor>
+  </xacro:vertical_tilting_rotor>
 
  
-  <xacro:vertical_rotor
+  <xacro:vertical_tilting_rotor
     robot_namespace="${namespace}"
     suffix="1"
     direction="cw"
@@ -219,10 +219,10 @@
     color="White">
     <origin xyz="0.211396 -0.119762 0.082219" rpy="0 0 0" />
    <xacro:insert_block name="rotor_inertia" />
-  </xacro:vertical_rotor>
+  </xacro:vertical_tilting_rotor>
 
 
-  <xacro:vertical_rotor
+  <xacro:vertical_tilting_rotor
     robot_namespace="${namespace}"
     suffix="5"
     direction="ccw"
@@ -242,9 +242,9 @@
     color="Blue">
     <origin xyz="-0.00187896 -0.242705 0.0822169" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
-  </xacro:vertical_rotor>
+  </xacro:vertical_tilting_rotor>
 
-  <xacro:vertical_rotor
+  <xacro:vertical_tilting_rotor
     robot_namespace="${namespace}"
     suffix="2"
     direction="cw"
@@ -264,7 +264,7 @@
     color="White">
     <origin xyz="-0.209396 -0.122762 0.082219" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
-  </xacro:vertical_rotor>
+  </xacro:vertical_tilting_rotor>
 
 
 </robot>

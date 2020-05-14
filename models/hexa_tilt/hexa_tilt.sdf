@@ -88,7 +88,7 @@
       <gravity>1</gravity>
       <velocity_decay/>
     </link>
-    <link name='hexa/imu_link'>
+    <link name='hexa_tilt/imu_link'>
       <pose frame=''>0 0 0 0 -0 0</pose>
       <inertial>
         <pose frame=''>0 0 0 0 -0 0</pose>
@@ -103,8 +103,8 @@
         </inertia>
       </inertial>
     </link>
-    <joint name='hexa/imu_joint' type='revolute'>
-      <child>hexa/imu_link</child>
+    <joint name='hexa_tilt/imu_joint' type='revolute'>
+      <child>hexa_tilt/imu_link</child>
       <parent>base_link</parent>
       <axis>
         <xyz>1 0 0</xyz>
@@ -121,8 +121,59 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-    <link name='rotor_0'>
+    <link name='tilt_rotor_0'>
       <pose frame=''>-0.209396 0.122762 0.082219 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+      <collision name='tilt_rotor_0_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.02</length>
+            <radius>0.01</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='tilt_rotor_0_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.02</length>
+            <radius>0.01</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='tilt_rotor_0_joint' type='revolute'>
+      <child>tilt_rotor_0</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-1.5708</lower>
+          <upper>1.5708</upper>
+          <effort>100</effort>
+          <velocity>1.57</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='rotor_0'>
+      <pose frame=''>-0.209396 0.122762 0.100219 0 -0 0</pose>
       <inertial>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <mass>0.005</mass>
@@ -172,7 +223,7 @@
     </link>
     <joint name='rotor_0_joint' type='revolute'>
       <child>rotor_0</child>
-      <parent>base_link</parent>
+      <parent>tilt_rotor_0</parent>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
@@ -186,8 +237,59 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-    <link name='rotor_1'>
+    <link name='tilt_rotor_1'>
       <pose frame=''>0.211396 -0.119762 0.082219 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+      <collision name='tilt_rotor_1_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.02</length>
+            <radius>0.01</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='tilt_rotor_1_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.02</length>
+            <radius>0.01</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='tilt_rotor_1_joint' type='revolute'>
+      <child>tilt_rotor_1</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-1.5708</lower>
+          <upper>1.5708</upper>
+          <effort>100</effort>
+          <velocity>1.57</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='rotor_1'>
+      <pose frame=''>0.211396 -0.119762 0.100219 0 -0 0</pose>
       <inertial>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <mass>0.005</mass>
@@ -237,7 +339,7 @@
     </link>
     <joint name='rotor_1_joint' type='revolute'>
       <child>rotor_1</child>
-      <parent>base_link</parent>
+      <parent>tilt_rotor_1</parent>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
@@ -251,8 +353,59 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-    <link name='rotor_2'>
+    <link name='tilt_rotor_2'>
       <pose frame=''>-0.209396 -0.122762 0.082219 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+      <collision name='tilt_rotor_2_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.02</length>
+            <radius>0.01</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='tilt_rotor_2_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.02</length>
+            <radius>0.01</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='tilt_rotor_2_joint' type='revolute'>
+      <child>tilt_rotor_2</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-1.5708</lower>
+          <upper>1.5708</upper>
+          <effort>100</effort>
+          <velocity>1.57</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='rotor_2'>
+      <pose frame=''>-0.209396 -0.122762 0.100219 0 -0 0</pose>
       <inertial>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <mass>0.005</mass>
@@ -302,7 +455,7 @@
     </link>
     <joint name='rotor_2_joint' type='revolute'>
       <child>rotor_2</child>
-      <parent>base_link</parent>
+      <parent>tilt_rotor_2</parent>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
@@ -316,8 +469,59 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-    <link name='rotor_3'>
+    <link name='tilt_rotor_3'>
       <pose frame=''>0.211396 0.119762 0.082219 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+      <collision name='tilt_rotor_3_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.02</length>
+            <radius>0.01</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='tilt_rotor_3_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.02</length>
+            <radius>0.01</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='tilt_rotor_3_joint' type='revolute'>
+      <child>tilt_rotor_3</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-1.5708</lower>
+          <upper>1.5708</upper>
+          <effort>100</effort>
+          <velocity>1.57</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='rotor_3'>
+      <pose frame=''>0.211396 0.119762 0.100219 0 -0 0</pose>
       <inertial>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <mass>0.005</mass>
@@ -367,7 +571,7 @@
     </link>
     <joint name='rotor_3_joint' type='revolute'>
       <child>rotor_3</child>
-      <parent>base_link</parent>
+      <parent>tilt_rotor_3</parent>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
@@ -381,8 +585,59 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-    <link name='rotor_4'>
+    <link name='tilt_rotor_4'>
       <pose frame=''>-0.001879 0.242705 0.082217 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+      <collision name='tilt_rotor_4_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.02</length>
+            <radius>0.01</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='tilt_rotor_4_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.02</length>
+            <radius>0.01</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='tilt_rotor_4_joint' type='revolute'>
+      <child>tilt_rotor_4</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-1.5708</lower>
+          <upper>1.5708</upper>
+          <effort>100</effort>
+          <velocity>1.57</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='rotor_4'>
+      <pose frame=''>-0.001879 0.242705 0.100217 0 -0 0</pose>
       <inertial>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <mass>0.005</mass>
@@ -432,7 +687,7 @@
     </link>
     <joint name='rotor_4_joint' type='revolute'>
       <child>rotor_4</child>
-      <parent>base_link</parent>
+      <parent>tilt_rotor_4</parent>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
@@ -446,8 +701,59 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-    <link name='rotor_5'>
+    <link name='tilt_rotor_5'>
       <pose frame=''>-0.001879 -0.242705 0.082217 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+      <collision name='tilt_rotor_5_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.02</length>
+            <radius>0.01</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='tilt_rotor_5_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.02</length>
+            <radius>0.01</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='tilt_rotor_5_joint' type='revolute'>
+      <child>tilt_rotor_5</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-1.5708</lower>
+          <upper>1.5708</upper>
+          <effort>100</effort>
+          <velocity>1.57</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='rotor_5'>
+      <pose frame=''>-0.001879 -0.242705 0.100217 0 -0 0</pose>
       <inertial>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <mass>0.005</mass>
@@ -497,7 +803,7 @@
     </link>
     <joint name='rotor_5_joint' type='revolute'>
       <child>rotor_5</child>
-      <parent>base_link</parent>
+      <parent>tilt_rotor_5</parent>
       <axis>
         <xyz>0 0 1</xyz>
         <limit>
@@ -512,12 +818,12 @@
       </axis>
     </joint>
     <plugin name='rosbag' filename='libgazebo_multirotor_base_plugin.so'>
-      <robotNamespace>hexa</robotNamespace>
+      <robotNamespace>hexa_tilt</robotNamespace>
       <linkName>base_link</linkName>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
     <plugin name='3_motor_model' filename='libgazebo_motor_model.so'>
-      <robotNamespace>hexa</robotNamespace>
+      <robotNamespace>hexa_tilt</robotNamespace>
       <jointName>rotor_3_joint</jointName>
       <linkName>rotor_3</linkName>
       <turningDirection>ccw</turningDirection>
@@ -534,7 +840,7 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
     <plugin name='0_motor_model' filename='libgazebo_motor_model.so'>
-      <robotNamespace>hexa</robotNamespace>
+      <robotNamespace>hexa_tilt</robotNamespace>
       <jointName>rotor_0_joint</jointName>
       <linkName>rotor_0</linkName>
       <turningDirection>ccw</turningDirection>
@@ -551,7 +857,7 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
     <plugin name='4_motor_model' filename='libgazebo_motor_model.so'>
-      <robotNamespace>hexa</robotNamespace>
+      <robotNamespace>hexa_tilt</robotNamespace>
       <jointName>rotor_4_joint</jointName>
       <linkName>rotor_4</linkName>
       <turningDirection>cw</turningDirection>
@@ -568,7 +874,7 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
     <plugin name='1_motor_model' filename='libgazebo_motor_model.so'>
-      <robotNamespace>hexa</robotNamespace>
+      <robotNamespace>hexa_tilt</robotNamespace>
       <jointName>rotor_1_joint</jointName>
       <linkName>rotor_1</linkName>
       <turningDirection>cw</turningDirection>
@@ -585,7 +891,7 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
     <plugin name='5_motor_model' filename='libgazebo_motor_model.so'>
-      <robotNamespace>hexa</robotNamespace>
+      <robotNamespace>hexa_tilt</robotNamespace>
       <jointName>rotor_5_joint</jointName>
       <linkName>rotor_5</linkName>
       <turningDirection>ccw</turningDirection>
@@ -602,7 +908,7 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
     <plugin name='2_motor_model' filename='libgazebo_motor_model.so'>
-      <robotNamespace>hexa</robotNamespace>
+      <robotNamespace>hexa_tilt</robotNamespace>
       <jointName>rotor_2_joint</jointName>
       <linkName>rotor_2</linkName>
       <turningDirection>cw</turningDirection>
@@ -619,11 +925,11 @@
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
     <plugin name='gps_plugin' filename='libgazebo_gps_plugin.so'>
-      <robotNamespace>hexa</robotNamespace>
+      <robotNamespace>hexa_tilt</robotNamespace>
       <gpsNoise>1</gpsNoise>
     </plugin>
     <plugin name='magnetometer_plugin' filename='libgazebo_magnetometer_plugin.so'>
-      <robotNamespace>hexa</robotNamespace>
+      <robotNamespace>hexa_tilt</robotNamespace>
       <pubRate>100</pubRate>
       <noiseDensity>0.0004</noiseDensity>
       <randomWalk>6.4e-06</randomWalk>
@@ -631,12 +937,12 @@
       <magTopic>/mag</magTopic>
     </plugin>
     <plugin name='barometer_plugin' filename='libgazebo_barometer_plugin.so'>
-      <robotNamespace>hexa</robotNamespace>
+      <robotNamespace>hexa_tilt</robotNamespace>
       <pubRate>50</pubRate>
       <baroTopic>/baro</baroTopic>
     </plugin>
     <plugin name='ros_interface' filename='libgazebo_ros_interface.so'>
-      <robotNamespace>hexa</robotNamespace>
+      <robotNamespace>hexa_tilt</robotNamespace>
       <imuSubTopic>/imu</imuSubTopic>
       <gpsSubTopic>/gps</gpsSubTopic>
       <motorSize>6</motorSize>
@@ -738,10 +1044,9 @@
         </channel>
       </control_channels>
     </plugin>
-    <static>0</static>
     <plugin name='rotors_gazebo_imu_plugin' filename='libgazebo_imu_plugin.so'>
-      <robotNamespace>hexa</robotNamespace>
-      <linkName>hexa/imu_link</linkName>
+      <robotNamespace>hexa_tilt</robotNamespace>
+      <linkName>hexa_tilt/imu_link</linkName>
       <imuTopic>/imu</imuTopic>
       <gyroscopeNoiseDensity>0.00018665</gyroscopeNoiseDensity>
       <gyroscopeRandomWalk>3.8785e-05</gyroscopeRandomWalk>
@@ -751,6 +1056,11 @@
       <accelerometerRandomWalk>0.006</accelerometerRandomWalk>
       <accelerometerBiasCorrelationTime>300.0</accelerometerBiasCorrelationTime>
       <accelerometerTurnOnBiasSigma>0.196</accelerometerTurnOnBiasSigma>
+    </plugin>
+    <static>0</static>
+    <plugin name='gazebo_ros_control' filename='libgazebo_ros_control.so'>
+      <robotNamespace>tilt</robotNamespace>
+      <legacyModeNS>1</legacyModeNS>
     </plugin>
   </model>
 </sdf>

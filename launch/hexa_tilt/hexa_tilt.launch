@@ -11,7 +11,7 @@
     <arg name="Y" default="0"/>
     <!-- vehicle model and world -->
     <arg name="est" default="ekf2"/>
-    <arg name="vehicle" default="hexa"/>
+    <arg name="vehicle" default="hexa_tilt"/>
     <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/empty.world"/>
     <arg name="sdf" default="$(find mavlink_sitl_gazebo)/models/$(arg vehicle)/$(arg vehicle).sdf"/>
 
@@ -28,7 +28,7 @@
     <!-- PX4 configs -->
     <arg name="interactive" default="true"/>
     <!-- PX4 SITL and Gazebo -->
-    <include file="$(find px4)/Tools/sitl_gazebo/launch/hexa/hexa_posix_sitl.launch">
+    <include file="$(find px4)/Tools/sitl_gazebo/launch/hexa_tilt/hexa_tilt_posix_sitl.launch">
         <arg name="x" value="$(arg x)"/>
         <arg name="y" value="$(arg y)"/>
         <arg name="z" value="$(arg z)"/>

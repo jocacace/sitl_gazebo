@@ -134,6 +134,7 @@
     <origin xyz="${arm_length_front_x} -${arm_length_front_y} ${rotor_offset_top}" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
   </xacro:vertical_tilting_rotor>
+
 <xacro:vertical_tilting_rotor
     robot_namespace="${namespace}"
     suffix="back_left"
@@ -156,7 +157,8 @@
     <xacro:insert_block name="rotor_inertia" />
   </xacro:vertical_tilting_rotor>
 
-  <xacro:vertical_tilting_rotor robot_namespace="${namespace}"
+  <xacro:vertical_tilting_rotor 
+		robot_namespace="${namespace}"
     suffix="front_left"
     direction="cw"
     motor_constant="${motor_constant}"
@@ -177,7 +179,8 @@
     <xacro:insert_block name="rotor_inertia" />
   </xacro:vertical_tilting_rotor>
 
-  <xacro:vertical_tilting_rotor robot_namespace="${namespace}"
+  <xacro:vertical_tilting_rotor 
+		robot_namespace="${namespace}"
     suffix="back_right"
     direction="cw"
     motor_constant="${motor_constant}"

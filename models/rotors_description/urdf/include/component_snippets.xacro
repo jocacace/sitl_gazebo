@@ -22,12 +22,13 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
 
-  <xacro:macro name="ros_interface_macro" params="namespace imu_sub_topic gps_sub_topic">
+  <xacro:macro name="ros_interface_macro" params="namespace imu_sub_topic gps_sub_topic motor_size">
     <gazebo>
       <plugin name="ros_interface" filename="libgazebo_ros_interface.so">
         <robotNamespace>${namespace}</robotNamespace>
 				<imuSubTopic>${imu_sub_topic}</imuSubTopic>
         <gpsSubTopic>${gps_sub_topic}</gpsSubTopic>
+        <motorSize>${motor_size}</motorSize>
         <motorSpeedCommandPubTopic>/gazebo/command/motor_speed</motorSpeedCommandPubTopic>
         <control_channels>
           <channel name="rotor1">

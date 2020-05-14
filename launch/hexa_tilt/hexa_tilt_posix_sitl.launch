@@ -11,10 +11,10 @@
     <arg name="Y" default="0"/>
     <!-- vehicle model and world -->
     <arg name="est" default="ekf2"/>
-    <arg name="vehicle" default="hexa"/>
+    <arg name="vehicle" default="hexa_tilt"/>
     <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/empty.world"/>
     <arg name="sdf" default="$(find mavlink_sitl_gazebo)/models/$(arg vehicle)/$(arg vehicle).sdf"/>
-    <env name="PX4_SIM_MODEL" value="hexa" />
+    <env name="PX4_SIM_MODEL" value="hexa_tilt" />
     <env name="PX4_ESTIMATOR" value="$(arg est)" />
 
     <!-- gazebo configs -->
@@ -43,12 +43,13 @@
         <arg name="respawn_gazebo" value="$(arg respawn_gazebo)"/>
     </include>
 
-		<!--
-		<param name="robot_description" command="$(find xacro)/xacro.py $(find mavlink_sitl_gazebo)/models/rotors_description/urdf/tarot_tilt/tarot_tilt_base.xacro rotors_description_dir:=$(find mavlink_sitl_gazebo)/models/rotors_description model_name:=tarot_tilt" />
-		<rosparam file="$(find mavlink_sitl_gazebo)/config/tarot_tilt.yaml" command="load"/>
+
+		<param name="robot_description" command="$(find xacro)/xacro.py $(find mavlink_sitl_gazebo)/models/rotors_description/urdf/hexa_tilt/hexa_tilt_base.xacro rotors_description_dir:=$(find mavlink_sitl_gazebo)/models/rotors_description model_name:=hexa_tilt" />
+		<rosparam file="$(find mavlink_sitl_gazebo)/config/hexa_tilt.yaml" command="load"/>
 		<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-		output="screen" ns="tilt" args="joint_state_controller tilt_rotor_0_joint_controller tilt_rotor_1_joint_controller tilt_rotor_2_joint_controller tilt_rotor_3_joint_controller" />
-		-->
+		output="screen" ns="tilt" args="joint_state_controller tilt_rotor_0_joint_controller tilt_rotor_1_joint_controller tilt_rotor_2_joint_controller tilt_rotor_3_joint_controller tilt_rotor_4_joint_controller tilt_rotor_5_joint_controller" />
+
+
 
     <!-- gazebo model -->
     <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -file $(arg sdf) -model $(arg vehicle) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>

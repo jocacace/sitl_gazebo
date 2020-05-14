@@ -2,7 +2,7 @@
 
 <robot name="hexa" xmlns:xacro="http://ros.org/wiki/xacro">
 	
-	<xacro:arg name='name' default='hexa' />
+	<xacro:arg name='name' default='hexa_tilt' />
 	<xacro:arg name='mavlink_addr' default='INADDR_ANY' />
 	<xacro:arg name='mavlink_udp_port' default='14560' />
 	<xacro:arg name='mavlink_tcp_port' default='4560' />
@@ -116,5 +116,11 @@
     <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:imu_plugin_macro>
 
+	<gazebo>	
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+		  <robotNamespace>tilt</robotNamespace>
+		  <legacyModeNS>true</legacyModeNS>
+		</plugin>
+	</gazebo>
 
 </robot>

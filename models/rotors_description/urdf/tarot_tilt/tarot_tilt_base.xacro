@@ -44,7 +44,9 @@
   <xacro:ros_interface_macro
     namespace="${namespace}"
     imu_sub_topic="/imu"
-    gps_sub_topic="/gps">
+    gps_sub_topic="/gps"
+    motor_size="4" >
+
   </xacro:ros_interface_macro>
 
   <!-- Instantiate magnetometer plugin. -->
