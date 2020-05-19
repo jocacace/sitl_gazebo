@@ -687,6 +687,7 @@ void GazeboMavlinkInterface::OnUpdate(const common::UpdateInfo&  /*_info*/) {
         turning_velocities_msg.add_motor_speed(0);
       } else {
         turning_velocities_msg.add_motor_speed(input_reference_[i]);
+				std::cout << "Motor: " << i << ": " << input_reference_[i] << std::endl;
       }
     }
     // TODO Add timestamp and Header
