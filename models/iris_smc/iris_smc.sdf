@@ -439,6 +439,7 @@
       <robotNamespace>iris_smc</robotNamespace>
       <imuSubTopic>/imu</imuSubTopic>
       <gpsSubTopic>/gps</gpsSubTopic>
+      <odomFrame>NED</odomFrame>
       <motorSize>4</motorSize>
       <motorSpeedCommandPubTopic>/gazebo/command/motor_speed</motorSpeedCommandPubTopic>
       <control_channels>

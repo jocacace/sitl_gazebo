@@ -45,6 +45,7 @@
     namespace="${namespace}"
     imu_sub_topic="/imu"
     gps_sub_topic="/gps"
+		odometry_fixed_frame="NED"  
     motor_size="4" >
 
   </xacro:ros_interface_macro>

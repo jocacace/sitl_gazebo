@@ -945,6 +945,7 @@
       <robotNamespace>hexa_tilt</robotNamespace>
       <imuSubTopic>/imu</imuSubTopic>
       <gpsSubTopic>/gps</gpsSubTopic>
+      <odomFrame>NED</odomFrame>
       <motorSize>6</motorSize>
       <motorSpeedCommandPubTopic>/gazebo/command/motor_speed</motorSpeedCommandPubTopic>
       <control_channels>
