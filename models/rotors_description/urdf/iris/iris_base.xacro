@@ -32,6 +32,7 @@
 
   <!-- macros for gazebo plugins, sensors -->
   <xacro:include filename="$(arg rotors_description_dir)/urdf/include/component_snippets.xacro" />
+
   <!-- Instantiate iris "mechanics" -->
   <xacro:include filename="$(arg rotors_description_dir)/urdf/iris/iris.xacro" />
 
@@ -75,7 +76,7 @@
     >
   </xacro:barometer_plugin_macro>
 
-  <xacro:if value="$(arg enable_mavlink_interface)">
+
   <!-- Instantiate mavlink telemetry interface. -->
   <xacro:mavlink_interface_macro
     namespace="${namespace}"
@@ -102,7 +103,7 @@
     use_tcp="$(arg use_tcp)"
     >
   </xacro:mavlink_interface_macro>
-  </xacro:if>
+
 
   <!-- Mount an ADIS16448 IMU. -->
   <xacro:imu_plugin_macro

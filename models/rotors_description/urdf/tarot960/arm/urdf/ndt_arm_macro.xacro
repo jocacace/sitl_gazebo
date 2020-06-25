@@ -1,0 +1,316 @@
+<?xml version="1.0"?>
+
+<robot name="ndt_arm_macro" xmlns:xacro="http://wiki.ros.org/xacro">
+	<xacro:macro name="transmission_block" params="joint_name">
+			<transmission name="${joint_name}_tran1">
+
+			  <type>transmission_interface/SimpleTransmission</type>
+
+			  <joint name="${joint_name}">
+					<!--
+			    
+			    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+					-->
+					<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			  </joint>
+			  <actuator name="${joint_name}_motor">
+					<!--
+					
+			    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			-->
+		
+			    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			    <mechanicalReduction>1</mechanicalReduction>
+			  </actuator>
+			</transmission>
+  </xacro:macro>
+  <xacro:macro name="ndt_arm" params="parent name *origin">
+    <!--joint between {parent} and link_0-->
+    <joint name="${name}_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${name}_link_0"/>
+    </joint>
+
+    <link name="${name}_link_0">
+      <inertial>
+        <origin xyz="0 0 0.0" rpy="0 0 0"/>
+        <mass value="0.02"/>
+        <inertia ixx="0.05"  ixy="0"  ixz="0" iyy="0.06" iyz="0" izz="0.03" />
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rotors_description/urdf/tarot960/arm/meshes/link0res.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="Grey"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+				<mesh filename="package://rotors_description/urdf/tarot960/arm/meshes/link0res.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="Grey"/>
+      </collision>
+			<!--
+			<self_collision_checking>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<geometry>
+					<capsule radius="0.15" length="0.25"/>
+				</geometry>
+			</self_collision_checking>
+			-->
+
+    </link>
+
+
+    <joint name="${name}_joint_1" type="continuous">
+
+	    <origin rpy="1.57 0 0" xyz="0 0 0.028"/>
+      <parent link="${name}_link_0"/>
+      <child link="${name}_link_1"/>
+      <axis xyz="0 1 0"/>
+      
+			<limit effort="10" velocity="1" />
+    </joint>
+	
+   <link name="${name}_link_1">
+      <inertial>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <mass value="0.05"/>
+        <inertia ixx="0.05"  ixy="0"  ixz="0" iyy="0.06" iyz="0" izz="0.03" />
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rotors_description/urdf/tarot960/arm/meshes/link1res.dae" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="Grey"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rotors_description/urdf/tarot960/arm/meshes/link1res.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="Grey"/>
+      </collision>
+
+			<self_collision_checking>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<geometry>
+					<capsule radius="0.15" length="0.25"/>
+				</geometry>
+			</self_collision_checking>
+
+    </link>
+
+   <link name="${name}_link_2">
+      <inertial>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <mass value="0.02"/>
+        <inertia ixx="0.05"  ixy="0"  ixz="0" iyy="0.06" iyz="0" izz="0.03" />
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0.0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rotors_description/urdf/tarot960/arm/meshes/link2res.dae" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="Grey"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0.0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rotors_description/urdf/tarot960/arm/meshes/link2res.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="Grey"/>
+      </collision>
+
+			<self_collision_checking>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<geometry>
+					<capsule radius="0.15" length="0.25"/>
+				</geometry>
+			</self_collision_checking>
+
+
+    </link>
+
+
+    <joint name="${name}_joint_2" type="revolute">
+
+	    <origin rpy="0.0 0 0" xyz="0 0.173 0.0355"/>
+      <parent link="${name}_link_1"/>
+      <child link="${name}_link_2"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="${-180 * 3.1415 / 180}" upper="${180 * 3.1415 / 180}" effort="10" velocity="1" />
+    </joint>
+
+
+   <link name="${name}_link_3">
+      <inertial>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <mass value="0.05"/>
+        <inertia ixx="0.05"  ixy="0"  ixz="0" iyy="0.06" iyz="0" izz="0.03" />
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0.047 0.006" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rotors_description/urdf/tarot960/arm/meshes/link3res.dae" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="Grey"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0.047 0.006" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rotors_description/urdf/tarot960/arm/meshes/link3res.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="Grey"/>
+      </collision>
+
+			<self_collision_checking>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<geometry>
+					<capsule radius="0.15" length="0.25"/>
+				</geometry>
+			</self_collision_checking>
+
+
+    </link>
+
+
+    <joint name="${name}_joint_3" type="revolute">
+
+	    <origin rpy="0.0 0 0" xyz="0 0.2492 -0.0315"/>
+      <parent link="${name}_link_2"/>
+      <child link="${name}_link_3"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="${-180 * 3.1415 / 180}" upper="${180 * 3.1415 / 180}" effort="10" velocity="1" />
+    </joint>
+
+
+		<link name="${name}_link_4">
+      <inertial>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <mass value="0.01"/>
+        <inertia ixx="0.05"  ixy="0"  ixz="0" iyy="0.06" iyz="0" izz="0.03" />
+      </inertial>
+
+      <visual>
+        <origin xyz="0.0018 0.15 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rotors_description/urdf/tarot960/arm/meshes/link4res.dae" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="Grey"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0.0018 0.15 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rotors_description/urdf/tarot960/arm/meshes/link4res.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="Grey"/>
+      </collision>
+
+			<self_collision_checking>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<geometry>
+					<capsule radius="0.15" length="0.25"/>
+				</geometry>
+			</self_collision_checking>
+
+
+    </link>
+
+
+    <joint name="${name}_joint_4" type="revolute">
+
+	    <origin rpy="0.0 0 0" xyz="0 0.068 -0.0"/>
+      <parent link="${name}_link_3"/>
+      <child link="${name}_link_4"/>
+      <axis xyz="0 1 0"/>
+      <limit lower="${-180 * 3.1415 / 180}" upper="${180 * 3.1415 / 180}" effort="10" velocity="1" />
+    </joint>
+
+
+
+		<link name="${name}_link_5">
+      <inertial>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <mass value="0.05"/>
+        <inertia ixx="0.05"  ixy="0"  ixz="0" iyy="0.06" iyz="0" izz="0.03" />
+      </inertial>
+
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rotors_description/urdf/tarot960/arm/meshes/link5res.dae" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="Grey"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rotors_description/urdf/tarot960/arm/meshes/link5res.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="Grey"/>
+      </collision>
+
+			<self_collision_checking>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<geometry>
+					<capsule radius="0.15" length="0.25"/>
+				</geometry>
+			</self_collision_checking>
+
+
+    </link>
+
+
+    <joint name="${name}_joint_5" type="revolute">
+
+	    <origin rpy="0.0 0 0" xyz="0 0.208 -0.0"/>
+      <parent link="${name}_link_4"/>
+      <child link="${name}_link_5"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="${-180 * 3.1415 / 180}" upper="${180 * 3.1415 / 180}" effort="10" velocity="1" />
+    </joint>
+		
+
+		<link name="${name}_tip_link">
+    </link>
+
+
+    <joint name="${name}_joint_tip" type="fixed">
+
+	    <origin rpy="0.0 0 0" xyz="0 0.11 0.0"/>
+      <parent link="${name}_link_5"/>
+      <child link="${name}_tip_link"/>
+    </joint>
+		
+			
+		<xacro:transmission_block joint_name="${name}_joint_1"/>
+		<xacro:transmission_block joint_name="${name}_joint_2"/>
+		<xacro:transmission_block joint_name="${name}_joint_3"/>
+		<xacro:transmission_block joint_name="${name}_joint_4"/>
+		<xacro:transmission_block joint_name="${name}_joint_5"/>
+
+		<gazebo>
+			<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+				<robotNamespace>ndt_arm</robotNamespace>
+				<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+				<legacyModeNS>true</legacyModeNS>
+			</plugin>
+		</gazebo>
+
+  </xacro:macro>
+</robot>
+
