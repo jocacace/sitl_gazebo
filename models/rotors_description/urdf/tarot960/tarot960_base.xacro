@@ -94,7 +94,7 @@
 <!--
   <xacro:if value="$(arg enable_mavlink_interface)">
 -->
-  <!-- Instantiate mavlink telemetry interface. -->
+  <!-- Instantiate mavlink telemetry interface. 
   <xacro:mavlink_interface_macro
     namespace="${namespace}"
     imu_sub_topic="/imu"
@@ -120,7 +120,7 @@
     use_tcp="$(arg use_tcp)"
     >
   </xacro:mavlink_interface_macro>
-  <!--
+  
 </xacro:if>
 -->
   <!-- Mount an ADIS16448 IMU. -->
