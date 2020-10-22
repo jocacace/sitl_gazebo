@@ -12,7 +12,7 @@
     <!-- vehicle model and world -->
     <arg name="est" default="ekf2"/>
     <arg name="vehicle" default="ndt2"/>
-		<arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/empty.world"/>
+		<arg name="world" default="$(find gazebo_ros)/worlds/empty.world"/>
     <arg name="sdf" default="$(find mavlink_sitl_gazebo)/models/$(arg vehicle)/$(arg vehicle).sdf"/>
 		<env name="PX4_SIM_MODEL" value="$(arg vehicle)" />
     <env name="PX4_ESTIMATOR" value="$(arg est)" />
@@ -44,7 +44,7 @@
     
     <param name="robot_description" command="$(find xacro)/xacro.py $(find mavlink_sitl_gazebo)/models/rotors_description/urdf/ndt2/ndt2_base.xacro rotors_description_dir:=$(find mavlink_sitl_gazebo)/models/rotors_description model_name:=ndt2" />
 		<rosparam file="$(find mavlink_sitl_gazebo)/config/ndt2.yaml" command="load"/>
-		<node args="tilt_motor_1 tilt_motor_2 tilt_motor_3 tilt_motor_4 joint_state_controller " 			 						name="controller_spawner" output="screen"
+		<node args="tilt_motor_1 tilt_motor_2 tilt_motor_3 tilt_motor_4 joint_state_controller " 			 						name="controller_spawner" output="screen" ns="ndt2"
   				pkg="controller_manager" respawn="false" type="spawner"/>
     
     <!-- gazebo model -->

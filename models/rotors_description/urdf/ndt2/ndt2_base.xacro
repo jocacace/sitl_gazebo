@@ -23,7 +23,7 @@
   <xacro:arg name='use_tcp' default='true' />
   <xacro:arg name='vehicle_is_tailsitter' default='false' />
   <xacro:arg name='visual_material' default='DarkGrey' />
-  <xacro:arg name='enable_mavlink_interface' default='true' />
+  <xacro:arg name='enable_mavlink_interface' default='false' />
   <xacro:arg name='enable_wind' default='false' />
   <!-- The following causes segfault with multiple vehicles if defaults to true!!! -->
   <xacro:arg name='enable_ground_truth' default='false' />
@@ -75,7 +75,15 @@
     >
   </xacro:barometer_plugin_macro>
 
+  <xacro:ros_interface_macro
+		  namespace="${namespace}"
+		  imu_sub_topic="/imu"
+		  gps_sub_topic="/gps"
+			odometry_fixed_frame="NED"
+		  motor_size="8" >
+  	</xacro:ros_interface_macro>
 
+  <xacro:if value="$(arg enable_mavlink_interface)">
   <!-- Instantiate mavlink telemetry interface. -->
   <xacro:mavlink_interface_macro
     namespace="${namespace}"
@@ -102,7 +110,7 @@
     use_tcp="$(arg use_tcp)"
     >
   </xacro:mavlink_interface_macro>
-
+  </xacro:if>
 
   <!-- Mount an ADIS16448 IMU. -->
   <xacro:imu_plugin_macro
@@ -186,5 +194,12 @@
     >
     </xacro:bag_plugin_macro>
   </xacro:if>
+
+ <gazebo>	
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>ndt2</robotNamespace>
+      <legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo>
 
 </robot>

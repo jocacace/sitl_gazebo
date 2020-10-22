@@ -1,6 +1,68 @@
 <?xml version="1.0"?>
 
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <!-- Main multirotor link -->
+  <xacro:macro name="multirotor_base_macro"
+    params="robot_namespace mass body_width body_height mesh_file mesh_scale color *inertia">
+    <link name="base_link"></link>
+
+    <joint name="base_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="base_link" />
+      <child link="base_link_inertia" />
+    </joint>
+
+    <link name="base_link_inertia">
+      <inertial>
+        <mass value="${mass}" />  <!-- [kg] -->
+        <origin xyz="0 0 0" />
+        <xacro:insert_block name="inertia" />
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://rotors_description/meshes/${mesh_file}"
+            scale="${mesh_scale}" />
+          <!-- <box size="${body_width} ${body_width} ${body_height}"/> --> <!-- [m] [m] [m] -->
+        </geometry>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://rotors_description/meshes/${mesh_file}"
+            scale="${mesh_scale}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- attach multirotor_base_plugin to the base_link -->
+    <gazebo>
+      <plugin filename="libgazebo_multirotor_base_plugin.so" name="rosbag">
+        <robotNamespace>${robot_namespace}</robotNamespace>
+        <linkName>base_link</linkName>
+        <rotorVelocitySlowdownSim>${rotor_velocity_slowdown_sim}</rotorVelocitySlowdownSim>
+      </plugin>
+    </gazebo>
+    <gazebo reference="base_link">
+      <material>Gazebo/${color}</material>
+      <collision name='base_link_inertia_collision'>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <max_vel>0.0</max_vel>
+            </ode>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+   </gazebo>
+  </xacro:macro>
+  
 <!-- Rotor joint and link -->
   <xacro:macro name="vertical_rotor"
     params="robot_namespace suffix direction motor_constant moment_constant parent mass_rotor radius_rotor time_constant_up time_constant_down max_rot_velocity motor_number rotor_drag_coefficient rolling_moment_coefficient color mesh mesh_scale *origin *inertia">
