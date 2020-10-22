@@ -2,20 +2,20 @@
 <robot name="ndt2" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:property name="namespace" value="ndt2" />
-  <xacro:property name="mass" value="6.0" /> <!-- [kg] -->
-  <xacro:property name="body_width" value="1.0" /> <!-- [m] -->
-  <xacro:property name="body_height" value="0.30" /> <!-- [m] -->
-  <xacro:property name="arm_mass" value="1.0" /> <!-- [kg] -->
-  <xacro:property name="arm_width" value="0.10" /> <!-- [m] -->
-  <xacro:property name="arm_height" value="0.10" /> <!-- [m] -->
+  <xacro:property name="mass" value="9.489" /> <!-- chassis mass [kg] -->
+  <xacro:property name="body_width" value="0.470" /> <!-- [m] -->
+  <xacro:property name="body_height" value="0.380" /> <!-- [m] -->
+  <xacro:property name="arm_mass" value="0.630" /> <!-- [kg] -->
+  <xacro:property name="arm_width" value="0.340" /> <!-- [m] -->
+  <xacro:property name="arm_height" value="0.06" /> <!-- [m] -->
   <xacro:property name="color" value="DarkGrey" />
   <xacro:property name="mesh_path" value="package://rotors_description/meshes/ndt2" />
   <xacro:property name="mesh_scale" value="0.001 0.001 0.001" />
 
   <xacro:property name="rotor_velocity_slowdown_sim" value="10" />
   <xacro:property name="mass_rotor" value="0.005" /> <!-- [kg] -->
-  <xacro:property name="radius_rotor" value="0.128" /> <!-- [m] -->
-  <xacro:property name="motor_constant" value="8.54858e-06" /> <!-- [kg.m/s^2] -->
+  <xacro:property name="radius_rotor" value="0.2545" /> <!-- [m] -->
+  <xacro:property name="motor_constant" value="0.00019065" /> <!-- [kg.m/s^2] -->
   <xacro:property name="moment_constant" value="0.06" /> <!-- [m] -->
   <xacro:property name="time_constant_up" value="0.0125" /> <!-- [s] -->
   <xacro:property name="time_constant_down" value="0.025" /> <!-- [s] -->
@@ -23,7 +23,7 @@
   <xacro:property name="sin30" value="0.5" />
   <xacro:property name="cos30" value="0.866025403784" />
   <xacro:property name="sqrt2" value="1.4142135623730951" />
-  <xacro:property name="rotor_drag_coefficient" value="1.75e-04" />
+  <xacro:property name="rotor_drag_coefficient" value="0.000001333" />
   <xacro:property name="rolling_moment_coefficient" value="0.000001" />
   <xacro:property name="x_rotor" value="0.121"  />
   <xacro:property name="y_rotor" value="0.121"  />
@@ -214,7 +214,7 @@
   <xacro:vertical_rotor
     robot_namespace="${namespace}"
     suffix="1"
-    direction="ccw"
+    direction="cw"
     motor_constant="${motor_constant}"
     moment_constant="${moment_constant}"
     parent="arm_2"
@@ -258,7 +258,7 @@
   <xacro:vertical_rotor
     robot_namespace="${namespace}"
     suffix="3"
-    direction="ccw"
+    direction="cw"
     motor_constant="${motor_constant}"
     moment_constant="${moment_constant}"
     parent="arm_4"
@@ -304,7 +304,7 @@
   <xacro:vertical_rotor
     robot_namespace="${namespace}"
     suffix="5"
-    direction="cw"
+    direction="ccw"
     motor_constant="${motor_constant}"
     moment_constant="${moment_constant}"
     parent="arm_2"
@@ -348,7 +348,7 @@
   <xacro:vertical_rotor
     robot_namespace="${namespace}"
     suffix="7"
-    direction="cw"
+    direction="ccw"
     motor_constant="${motor_constant}"
     moment_constant="${moment_constant}"
     parent="arm_4"
