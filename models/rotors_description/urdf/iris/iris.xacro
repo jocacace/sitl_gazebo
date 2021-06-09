@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
 <robot name="iris" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:arg name='rotors_description_dir' default='$(find mavlink_sitl_gazebo)/models/rotors_description' />
   <!-- Properties -->
   <xacro:property name="namespace" value="" />
   <xacro:property name="rotor_velocity_slowdown_sim" value="10" />
@@ -27,7 +28,7 @@
   <xacro:property name="sqrt2" value="1.4142135623730951" />
   <xacro:property name="rotor_drag_coefficient" value="1.75e-04" />
   <xacro:property name="rolling_moment_coefficient" value="0.000001" />
-  <xacro:property name="color" value="$(arg visual_material)" />
+  <xacro:property name="color" value="white" />
 
   <!-- Property Blocks -->
   <xacro:property name="body_inertia">
@@ -50,8 +51,8 @@
   <!-- Included URDF Files -->
   <xacro:include filename="$(arg rotors_description_dir)/urdf/include/multirotor_base.xacro" />
   <xacro:include filename="$(arg rotors_description_dir)/urdf/include/sensors.xacro" />
-
-
+  <xacro:include filename="$(arg rotors_description_dir)/urdf/include/_d435.urdf.xacro" />
+		<!--
 		<xacro:camera_macro
 				namespace="${namespace}"
 				parent_link="base_link"
@@ -70,17 +71,18 @@
 			<box size="0.02 0.02 0.02" />
 			<origin xyz="0.0 0 -0.04" rpy="0.0 1.57 0.0" />
 		</xacro:camera_macro>
-		<!--
-		<xacro:xtion_pro_live name="rgbd_camera" parent="base_link"> 
-			<origin xyz="0.11 0.0 -0.02" rpy="0.0 0.95 0.0"/>
-			<origin xyz="0 0 0" rpy="0.0 0 0.0"/>
-		</xacro:xtion_pro_live>
 		-->
+		
+		<xacro:sensor_d435 parent="base_link" >
+      		<origin xyz="0 0.0 -0.04" rpy="0 1.57 0"/>
+  		</xacro:sensor_d435>
+
+		<!--
 		<xacro:xtion_pro_live name="rgbd_camera" parent="base_link"> 
 			<origin xyz="0.11 0.0 -0.02" rpy="0.0 0.5 0.0"/>
 			<origin xyz="0 0 0" rpy="0.0 0 0.0"/>
 		</xacro:xtion_pro_live>
-		
+		-->
   <!-- Instantiate multirotor_base_macro once -->
   <xacro:multirotor_base_macro
     robot_namespace="${namespace}"

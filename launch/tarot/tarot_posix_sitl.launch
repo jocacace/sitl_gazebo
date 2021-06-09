@@ -18,7 +18,7 @@
     <env name="PX4_ESTIMATOR" value="$(arg est)" />
 
     <!-- gazebo configs -->
-    <arg name="gui" default="false"/>
+    <arg name="gui" default="true"/>
     <arg name="debug" default="false"/>
     <arg name="verbose" default="false"/>
     <arg name="paused" default="false"/>
@@ -42,4 +42,10 @@
     </include>
     <!-- gazebo model -->
     <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -file $(arg sdf) -model $(arg vehicle) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
+	
+	<!--
+	<param name="robot_description" textfile="$(find mavlink_sitl_gazebo)/models/rotors_description/urdf/tarot/tarot_base.xacro" />
+		<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" /> -->
+
 </launch>

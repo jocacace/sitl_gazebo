@@ -23,7 +23,7 @@
   <xacro:arg name='use_tcp' default='true' />
   <xacro:arg name='vehicle_is_tailsitter' default='false' />
   <xacro:arg name='visual_material' default='DarkGrey' />
-  <xacro:arg name='enable_mavlink_interface' default='false' />
+  <xacro:arg name='enable_mavlink_interface' default='true' />
   <xacro:arg name='enable_wind' default='false' />
   <!-- The following causes segfault with multiple vehicles if defaults to true!!! -->
   <xacro:arg name='enable_ground_truth' default='false' />
@@ -195,7 +195,7 @@
     </xacro:bag_plugin_macro>
   </xacro:if>
 
- <gazebo>	
+ <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>ndt2</robotNamespace>
       <legacyModeNS>true</legacyModeNS>

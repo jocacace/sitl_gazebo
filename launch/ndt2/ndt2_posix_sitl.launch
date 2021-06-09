@@ -5,7 +5,7 @@
     <!-- vehicle pose -->
     <arg name="x" default="0"/>
     <arg name="y" default="0"/>
-    <arg name="z" default="0.4"/>
+    <arg name="z" default="0.38"/>
     <arg name="R" default="0"/>
     <arg name="P" default="0"/>
     <arg name="Y" default="0"/>
@@ -13,6 +13,7 @@
     <arg name="est" default="ekf2"/>
     <arg name="vehicle" default="ndt2"/>
 		<arg name="world" default="$(find gazebo_ros)/worlds/empty.world"/>
+
     <arg name="sdf" default="$(find mavlink_sitl_gazebo)/models/$(arg vehicle)/$(arg vehicle).sdf"/>
 		<env name="PX4_SIM_MODEL" value="$(arg vehicle)" />
     <env name="PX4_ESTIMATOR" value="$(arg est)" />
@@ -20,18 +21,17 @@
     <!-- gazebo configs -->
     <arg name="gui" default="true"/>
     <arg name="debug" default="false"/>
-    <arg name="verbose" default="false"/>
-    <arg name="paused" default="true"/>
+    <arg name="verbose" default="true"/>
+    <arg name="paused" default="false"/>
     <arg name="respawn_gazebo" default="false"/>
     <!-- PX4 configs -->
     <arg name="interactive" default="true"/>
-    <!-- PX4 SITL -->
+    <!-- PX4 SITL
     <arg unless="$(arg interactive)" name="px4_command_arg1" value="-d"/>
     <arg     if="$(arg interactive)" name="px4_command_arg1" value=""/>
-    <!--
     <node name="sitl" pkg="px4" type="px4" output="screen"
         args="$(find px4)/ROMFS/px4fmu_common -s etc/init.d-posix/rcS $(arg px4_command_arg1)" required="true"/>
-		-->
+    -->
     <!-- Gazebo sim -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="gui" value="$(arg gui)"/>
@@ -41,12 +41,14 @@
         <arg name="paused" value="$(arg paused)"/>
         <arg name="respawn_gazebo" value="$(arg respawn_gazebo)"/>
     </include>
-    
+    <!-- My spawn -->
     <param name="robot_description" command="$(find xacro)/xacro.py $(find mavlink_sitl_gazebo)/models/rotors_description/urdf/ndt2/ndt2_base.xacro rotors_description_dir:=$(find mavlink_sitl_gazebo)/models/rotors_description model_name:=ndt2" />
 		<rosparam file="$(find mavlink_sitl_gazebo)/config/ndt2.yaml" command="load"/>
-		<node args="tilt_motor_1 tilt_motor_2 tilt_motor_3 tilt_motor_4 joint_state_controller " 			 						name="controller_spawner" output="screen" ns="ndt2"
+		<node args="tilt_motor_1 tilt_motor_2 tilt_motor_3 tilt_motor_4 joint_state_controller " name="controller_spawner" output="screen" ns="ndt2"
   				pkg="controller_manager" respawn="false" type="spawner"/>
-    
-    <!-- gazebo model -->
+
     <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -file $(arg sdf) -model $(arg vehicle) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
 </launch>

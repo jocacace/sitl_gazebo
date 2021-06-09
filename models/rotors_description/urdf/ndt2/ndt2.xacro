@@ -16,40 +16,40 @@
   <xacro:property name="mass_rotor" value="0.005" /> <!-- [kg] -->
   <xacro:property name="radius_rotor" value="0.2545" /> <!-- [m] -->
   <xacro:property name="motor_constant" value="0.00019065" /> <!-- [kg.m/s^2] -->
-  <xacro:property name="moment_constant" value="0.06" /> <!-- [m] -->
+  <xacro:property name="moment_constant" value="0.000001333" /> <!-- 0.06 [m] -->
   <xacro:property name="time_constant_up" value="0.0125" /> <!-- [s] -->
   <xacro:property name="time_constant_down" value="0.025" /> <!-- [s] -->
-  <xacro:property name="max_rot_velocity" value="1100" /> <!-- [rad/s] -->
+  <xacro:property name="max_rot_velocity" value="5000" /> <!-- [rad/s] -->
   <xacro:property name="sin30" value="0.5" />
   <xacro:property name="cos30" value="0.866025403784" />
   <xacro:property name="sqrt2" value="1.4142135623730951" />
-  <xacro:property name="rotor_drag_coefficient" value="0.000001333" />
+  <xacro:property name="rotor_drag_coefficient" value="1.75e-04" />
   <xacro:property name="rolling_moment_coefficient" value="0.000001" />
   <xacro:property name="x_rotor" value="0.121"  />
   <xacro:property name="y_rotor" value="0.121"  />
   <xacro:property name="z_rotor" value="0.075"  />
-	
+
   <xacro:include filename="$(arg rotors_description_dir)/urdf/ndt2/ndt2.trans" />
   <xacro:include filename="$(arg rotors_description_dir)/urdf/ndt2/ndt2.gazebo" />
-	
-  <xacro:include filename="$(arg rotors_description_dir)/urdf/include/ndt2_rotor.xacro" /> 
+
+  <xacro:include filename="$(arg rotors_description_dir)/urdf/include/ndt2_rotor.xacro" />
   <!--<xacro:include filename="$(arg rotors_description_dir)/urdf/include/multirotor_base.xacro" />-->
   <xacro:include filename="$(arg rotors_description_dir)/urdf/include/sensors.xacro" />
-  
+
   <xacro:property name="body_inertia">
-    <inertia 
+    <inertia
     ixx="${1/12 * mass * (body_height * body_height + body_width * body_width)}"
     iyy="${1/12 * mass * (body_height * body_height + body_width * body_width)}"
-    izz="${1/12 * mass * (body_width * body_width + body_width * body_width)}"    
-    ixy="0.0" ixz="0.0" iyz="0.0" /> 
+    izz="${1/12 * mass * (body_width * body_width + body_width * body_width)}"
+    ixy="0.0" ixz="0.0" iyz="0.0" />
   </xacro:property>
-  
+
   <xacro:property name="arm_inertia">
-    <inertia 
+    <inertia
     ixx="${1/12 * arm_mass * (arm_height * arm_height + arm_width * arm_width)}"
     iyy="${1/12 * arm_mass * (arm_height * arm_height + arm_width * arm_width)}"
-    izz="${1/12 * arm_mass * (arm_width  * arm_width  + arm_width * arm_width)}"    
-    ixy="0.0" ixz="0.0" iyz="0.0" /> 
+    izz="${1/12 * arm_mass * (arm_width  * arm_width  + arm_width * arm_width)}"
+    ixy="0.0" ixz="0.0" iyz="0.0" />
   </xacro:property>
 
   <xacro:property name="rotor_inertia">
@@ -57,9 +57,9 @@
     ixx="${1/12 * mass_rotor * (0.015 * 0.015 + 0.003 * 0.003) * rotor_velocity_slowdown_sim}"
     iyy="${1/12 * mass_rotor * (4 * radius_rotor * radius_rotor + 0.003 * 0.003) * rotor_velocity_slowdown_sim}"
     izz="${1/12 * mass_rotor * (4 * radius_rotor * radius_rotor + 0.015 * 0.015) * rotor_velocity_slowdown_sim}"
-    ixy="0.0" ixz="0.0"  iyz="0.0" /> 
+    ixy="0.0" ixz="0.0"  iyz="0.0" />
   </xacro:property>
-  
+
   <xacro:multirotor_base_macro
     robot_namespace="${namespace}"
     mass="${mass}"
@@ -71,7 +71,7 @@
   >
     <xacro:insert_block name="body_inertia" />
   </xacro:multirotor_base_macro>
-  
+
   <link name="arm_4">
     <inertial>
       <origin rpy="0 0 0" xyz="0.083 -0.083 0"/>
@@ -156,7 +156,7 @@
     </collision>
   </link>
 
-  <joint name="tilt_motor_4" type="continuous">
+  <joint name="tilt_motor_4" type="revolute">
     <origin rpy="0 0 0" xyz="0.224433 -0.234052 0.04"/>
     <parent link="base_link"/>
     <child link="arm_4"/>
@@ -164,15 +164,15 @@
     <limit effort="30" velocity="1.0" lower="-1.57" upper="1.57"/>
   </joint>
 
-  <joint name="tilt_motor_2" type="continuous">
+  <joint name="tilt_motor_2" type="revolute">
     <origin rpy="0 0 0" xyz="-0.224433 0.234052 0.04"/>
     <parent link="base_link"/>
     <child link="arm_2"/>
-    <axis xyz="-0.707107 0.707107 -0.0"/>
+    <axis xyz="-0.707107 0.707107 0.0"/>
     <limit effort="30" velocity="1.0" lower="-1.57" upper="1.57"/>
   </joint>
 
-  <joint name="tilt_motor_3" type="continuous">
+  <joint name="tilt_motor_3" type="revolute">
     <origin rpy="0 0 0" xyz="-0.224433 -0.234052 0.04"/>
     <parent link="base_link"/>
     <child link="arm_3"/>
@@ -180,7 +180,7 @@
     <limit effort="30" velocity="1.0" lower="-1.57" upper="1.57"/>
   </joint>
 
-  <joint name="tilt_motor_1" type="continuous">
+  <joint name="tilt_motor_1" type="revolute">
     <origin rpy="0 0 0" xyz="0.224433 0.234052 0.04"/>
     <parent link="base_link"/>
     <child link="arm_1"/>
@@ -206,7 +206,7 @@
     rolling_moment_coefficient="${rolling_moment_coefficient}"
     mesh="prop.stl"
     mesh_scale="${mesh_scale}"
-    color="White">
+    color="Blue">
     <origin xyz="${x_rotor} ${y_rotor} ${z_rotor}" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
   </xacro:vertical_rotor>
@@ -228,7 +228,7 @@
     rolling_moment_coefficient="${rolling_moment_coefficient}"
     mesh="prop.stl"
     mesh_scale="${mesh_scale}"
-    color="Blue">
+    color="White">
     <origin xyz="-${x_rotor} ${y_rotor} ${z_rotor}" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
   </xacro:vertical_rotor>
@@ -340,7 +340,7 @@
     rolling_moment_coefficient="${rolling_moment_coefficient}"
     mesh="prop.stl"
     mesh_scale="${mesh_scale}"
-    color="Blue">
+    color="White">
     <origin xyz="-${x_rotor} -${y_rotor} -${z_rotor}" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
   </xacro:vertical_rotor>
@@ -362,7 +362,7 @@
     rolling_moment_coefficient="${rolling_moment_coefficient}"
     mesh="prop.stl"
     mesh_scale="${mesh_scale}"
-    color="White">
+    color="Blue">
     <origin xyz="${x_rotor} -${y_rotor} -${z_rotor}" rpy="0 0 0" />
     <xacro:insert_block name="rotor_inertia" />
   </xacro:vertical_rotor>

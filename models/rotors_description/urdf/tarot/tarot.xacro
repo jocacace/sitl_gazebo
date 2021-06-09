@@ -32,13 +32,14 @@
   <xacro:property name="color" value="$(arg visual_material)" />
   
 
-	<xacro:arg name='enable_camera' default='false'/>
+  <xacro:arg name='enable_camera' default='true'/>
   <xacro:arg name='enable_depth' default='false' />
   <xacro:arg name='enable_laser' default='false' />
 
 	
   <xacro:include filename="$(arg rotors_description_dir)/urdf/include/multirotor_base.xacro" />
   <xacro:include filename="$(arg rotors_description_dir)/urdf/include/sensors.xacro" />
+  <xacro:include filename="$(arg rotors_description_dir)/urdf/include/_d435.urdf.xacro" />
 
   <!-- Property Blocks -->
   <xacro:property name="body_inertia">
@@ -61,7 +62,7 @@
 
 
   <xacro:if value="$(arg enable_camera)">
-		<xacro:camera_macro
+		<!--<xacro:camera_macro
 				namespace="${namespace}"
 				parent_link="base_link"
 				camera_suffix="raw"
@@ -79,11 +80,16 @@
 			<box size="0.02 0.02 0.02" />
 			<origin xyz="0.0 0 -0.04" rpy="0.0 1.57 0.0" />
 		</xacro:camera_macro>
+		-->
   </xacro:if>
+  
+  <xacro:sensor_d435 parent="base_link" >
+    <origin xyz="-0.01 0.0 -0.045" rpy="0 1.57 0"/>
+  </xacro:sensor_d435>
 
   <xacro:if value="$(arg enable_depth)">
 		<xacro:xtion_pro_live name="rgbd_camera" parent="base_link"> 
-			<origin xyz="0.11 0.0 -0.02" rpy="0.0 0.95 0.0"/>
+			<origin xyz="0.11 0.0 -0.02" rpy="0.0 1.95 0.0"/>
 			<origin xyz="0 0 0" rpy="0.0 0 0.0"/>
 		</xacro:xtion_pro_live>
 	</xacro:if>	

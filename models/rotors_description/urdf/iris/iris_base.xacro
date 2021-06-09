@@ -5,6 +5,7 @@
   Is there a reason not to make all properties arguments?
   -->
   <xacro:arg name='name' default='iris' />
+  <xacro:arg name='rotors_description_dir' default='$(find mavlink_sitl_gazebo)/models/rotors_description' />
   <xacro:arg name='mavlink_addr' default='INADDR_ANY' />
   <xacro:arg name='mavlink_udp_port' default='14560' />
   <xacro:arg name='mavlink_tcp_port' default='4560' />
